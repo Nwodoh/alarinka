@@ -10,8 +10,6 @@ const imageDownloader = require("image-downloader");
 const multer = require("multer");
 const fs = require("fs");
 require("dotenv").config();
-process.env.MONGO_URL =
-  "mongodb+srv://mickdaniels101:zkz2TAp8mAv9ewXL@cluster0.p1pw1m8.mongodb.net/development?retryWrites=true&w=majority&appName=Cluster0";
 const app = express();
 
 const bcryptSalt = bcrypt.genSaltSync(10);

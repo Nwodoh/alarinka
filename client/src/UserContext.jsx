@@ -1,32 +1,43 @@
-import {createContext, useEffect, useState} from "react";
-import axios from "axios";
+import { createContext, useContext, useEffect, useState } from "react";
 // import {data} from "autoprefixer";
 
 export const UserContext = createContext({});
 
-
 // eslint-disable-next-line react/prop-types
-export function UserContextProvider({children}) {
-    const [user, setUser] = useState(null);
-    const [ready,setReady] = useState(false);
+export function UserContextProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [ready, setReady] = useState(false);
+  const API_URL = "http://localhost:4000";
 
-    useEffect(() => {
-        if (!user) {
-          axios.get('/profile')
-            .then(({data}) => {
-              setUser(data);
-              setReady(true);
-            })
-            .catch(error => {
-              console.error('Error fetching profile:', error);
-              setReady(true);
-            });
-        }
-      }, []);
+  useEffect(() => {
+    async function getUser() {
+      if (user) return;
+      try {
+        const res = await fetch(`${API_URL}/user`, {
+          method: "GET",
+          credentials: "include",
+        });
+        const { user } = await res.json();
+        setUser(user);
+      } catch (err) {
+        console.error("Error fetching profile:", err.message);
+      } finally {
+        setReady(true);
+      }
+    }
+    getUser();
+  }, [user]);
 
-    return (
-      <UserContext.Provider value={{user, setUser, ready}}>
-        {children}
-      </UserContext.Provider>
-    );
-  }
+  return (
+    <UserContext.Provider value={{ user, setUser, ready, API_URL }}>
+      {children}
+    </UserContext.Provider>
+  );
+}
+
+export function useUserContext() {
+  const context = useContext(UserContext);
+  if (context === undefined)
+    throw new Error("CityContext was used outside the CityProvider.");
+  return context;
+}
