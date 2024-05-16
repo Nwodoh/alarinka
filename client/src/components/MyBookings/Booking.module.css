@@ -1,13 +1,17 @@
 .booking {
   display: flex;
-  gap: 15px;
+
   border-radius: 3px;
   overflow: hidden;
   -webkit-box-shadow: 0 0.94rem 2.5rem rgba(0, 0, 0, 0.1);
   box-shadow: 0 0.94rem 2.5rem rgba(0, 0, 0, 0.1);
   background-color: #fff;
   color: #777;
-  max-width: 500px;
+  width: 450px;
+}
+
+.booking {
+  margin-right: 30px;
 }
 
 .picture {
@@ -112,4 +116,8 @@
 
 .ctaPending {
   background-color: #ff7730;
+}
+
+.ctaDelete {
+  background-color: rgb(255, 44, 44);
 }

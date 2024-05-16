@@ -17,6 +17,7 @@ const userRoutes = require("./routers/userRoutes");
 const imageRoutes = require("./routers/imageRoutes");
 const placeRoutes = require("./routers/placeRoutes");
 const bookingRoutes = require("./routers/bookingRoutes");
+const userSocket = require("./controllers/user/userSocket");
 const bookingSocket = require("./controllers/booking/bookingSocket");
 const globalErrorHandler = require("./controllers/globalErrorHandler");
 

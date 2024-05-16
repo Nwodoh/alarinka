@@ -87,4 +87,18 @@ module.exports = class Email {
       `Alarinka - (${this.place.title}) new booking.`
     );
   }
+
+  async acceptedBooking() {
+    await this.send(
+      "acceptedBooking",
+      `Your booking of (${this.place.title}) was accepted.`
+    );
+  }
+
+  async rejectedBooking() {
+    await this.send(
+      "rejectedBooking",
+      `Your request to book (${this.place.title}) was not accepted.`
+    );
+  }
 };

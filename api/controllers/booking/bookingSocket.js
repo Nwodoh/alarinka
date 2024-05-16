@@ -38,7 +38,6 @@ exports.createBooking = async (socket, queryObj) => {
 
 exports.updateStatus = async (socket, queryObj) => {
   const { status, bookingId } = queryObj;
-  console.log({ status, bookingId });
 
   if (status === "accepted") {
     const booking = await Booking.findByIdAndUpdate(
@@ -47,10 +46,36 @@ exports.updateStatus = async (socket, queryObj) => {
       { new: true }
     )
       .populate("booker")
+      .populate("owner")
       .populate("place");
+
+    const emailTransporter = new Email({
+      place: booking.place,
+      owner: booking.owner,
+      user: booking.booker,
+    });
+
+    await emailTransporter.acceptedBooking();
     socket.emit("updated booking", booking);
-  } else {
+  } else if (status === "delete") {
     await Booking.deleteOne({ _id: bookingId });
     return socket.emit("deleted booking", bookingId);
+  } else {
+    const {
+      place,
+      owner,
+      booker: user,
+    } = await Booking.findOneAndDelete({ _id: bookingId })
+      .populate("booker")
+      .populate("owner")
+      .populate("place");
+
+    const emailTransporter = new Email({
+      place,
+      owner,
+      user,
+    });
+    await emailTransporter.rejectedBooking();
+    return socket.emit("declined booking", bookingId);
   }
 };

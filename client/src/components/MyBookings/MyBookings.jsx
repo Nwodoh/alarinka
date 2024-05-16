@@ -19,23 +19,36 @@ function MyBookings() {
 
   useEffect(() => {
     function handleUpdate(newBooking) {
-      if (newBooking) return;
+      const bookingId = newBooking?._id;
+      if (!bookingId) return;
+      setBookings((bookings) =>
+        bookings.map((booking) =>
+          booking._id !== bookingId ? booking : newBooking
+        )
+      );
     }
 
     function handleDelete(bookingId) {
-      setBookings((bookings) => {
-        bookings.forEach((booking, i) => {
-          if (booking._id === bookingId) booking.splice(i, 1);
-        });
-        console.log(bookings);
-        return bookings;
-      });
+      if (!bookingId) return;
+      alert("deleted successfully");
+      setBookings((bookings) =>
+        bookings.filter((booking) => booking._id !== bookingId)
+      );
+    }
+
+    function handleDecline(bookingId) {
+      if (!bookingId) return;
+      setBookings((bookings) =>
+        bookings.filter((booking) => booking._id !== bookingId)
+      );
     }
 
     socket.on("updated booking", handleUpdate);
+    socket.on("declined booking", handleDecline);
     socket.on("deleted booking", handleDelete);
     return () => {
       socket.off("updated booking", handleUpdate);
+      socket.off("declined booking", handleDecline);
       socket.off("deleted booking", handleDelete);
     };
   }, []);

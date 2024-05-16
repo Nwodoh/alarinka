@@ -56,7 +56,7 @@ function PlaceDetails() {
 
     return () => {
       socket.off("create booking error", handleBookingError);
-      socket.off("placed booked", handlePlaceBooked);
+      socket.off("place booked", handlePlaceBooked);
     };
   }, []);
 

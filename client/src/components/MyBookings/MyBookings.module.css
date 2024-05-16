@@ -26,6 +26,6 @@
   flex-wrap: wrap;
 }
 
-.bookingContainer > div:not(:last-child) {
+.bookingContainer > div {
   margin-bottom: 3rem;
 }

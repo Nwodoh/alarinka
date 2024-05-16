@@ -30,22 +30,35 @@ function Booking({ booking, handleStatusUpdate }) {
         <div className={styles.ctaContainer}>
           <div>Booked on {new Date(createdAt).toDateString()}</div>
           <div>
-            <button
-              onClick={() =>
-                handleStatusUpdate({ status: "decline", bookingId })
-              }
-              className={`${styles.cta} ${styles.ctaPending}`}
-            >
-              Decline
-            </button>
-            <button
-              onClick={() =>
-                handleStatusUpdate({ status: "accepted", bookingId })
-              }
-              className={styles.cta}
-            >
-              Accept
-            </button>
+            {bookingStatus !== "accepted" ? (
+              <>
+                <button
+                  onClick={() =>
+                    handleStatusUpdate({ status: "decline", bookingId })
+                  }
+                  className={`${styles.cta} ${styles.ctaPending}`}
+                >
+                  Decline
+                </button>
+                <button
+                  onClick={() =>
+                    handleStatusUpdate({ status: "accepted", bookingId })
+                  }
+                  className={styles.cta}
+                >
+                  Accept
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() =>
+                  handleStatusUpdate({ status: "delete", bookingId })
+                }
+                className={`${styles.cta} ${styles.ctaDelete}`}
+              >
+                Delete
+              </button>
+            )}
           </div>
         </div>
       </div>
