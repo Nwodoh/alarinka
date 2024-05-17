@@ -7,6 +7,9 @@ export const UserContext = createContext({});
 export function UserContextProvider({ children }) {
   const [user, setUser] = useState(null);
   const [ready, setReady] = useState(false);
+  const [notificationIsActive, setNotificationIsActive] = useState({
+    booking: false,
+  });
   const API_URL = "http://localhost:4000";
 
   useEffect(() => {
@@ -29,7 +32,16 @@ export function UserContextProvider({ children }) {
   }, [user]);
 
   return (
-    <UserContext.Provider value={{ user, setUser, ready, API_URL }}>
+    <UserContext.Provider
+      value={{
+        user,
+        setUser,
+        ready,
+        API_URL,
+        notificationIsActive,
+        setNotificationIsActive,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

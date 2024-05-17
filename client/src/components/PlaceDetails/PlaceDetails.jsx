@@ -30,7 +30,7 @@ function PlaceDetails() {
   useEffect(() => {
     async function getPlace() {
       try {
-        const res = await fetch(`${API_URL}/place/${slug}`);
+        const res = await fetch(`${API_URL}/place/detail/${slug}`);
         const { place: placeData, status } = await res.json();
         if (status !== "success") throw new Error("Place Not Found");
         setPlace(placeData);

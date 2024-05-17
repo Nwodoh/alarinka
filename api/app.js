@@ -61,8 +61,11 @@ io.on("connection", (socket) => {
     "update status",
     async (queryObj) => await bookingSocket.updateStatus(socket, queryObj)
   );
-  socket.on("join room", (room) => {
-    socket.join(room);
+  socket.on("activate bookings notification", (userId) => {
+    const MAX_ROOM_SIZE = 1;
+    const roomSize = io.sockets.adapter.rooms[userId]?.length || 0;
+    if (roomSize >= MAX_ROOM_SIZE) return;
+    socket.join(userId);
   });
   socket.on("disconnect", () => {});
 });

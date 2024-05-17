@@ -8,9 +8,6 @@
   background-color: #fff;
   color: #777;
   width: 450px;
-}
-
-.booking {
   margin-right: 30px;
 }
 
@@ -45,7 +42,7 @@
   flex-direction: column;
   gap: 10%;
   max-width: 310px;
-  margin-right: 1rem;
+  margin: 0 1rem 0 0.5rem;
 }
 
 .about {

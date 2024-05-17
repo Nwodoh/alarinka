@@ -5,7 +5,12 @@ import { useUserContext } from "../../UserContext";
 import { socket } from "../../socket";
 
 function MyBookings() {
-  const { API_URL, user } = useUserContext();
+  const {
+    API_URL,
+    user,
+    notificationIsActive: { booking: bookingIsActive },
+    setNotificationIsActive,
+  } = useUserContext();
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
@@ -15,6 +20,22 @@ function MyBookings() {
       setBookings(allBookings);
     }
     getBookings();
+  }, []);
+
+  useEffect(() => {
+    function activateNotification() {
+      const userId = user._id;
+      if (!userId || bookingIsActive) return;
+      socket.emit("activate bookings notification", userId);
+      setNotificationIsActive((notifications) => {
+        return { ...notifications, booking: true };
+      });
+    }
+    activateNotification();
+
+    return () => {
+      activateNotification();
+    };
   }, []);
 
   useEffect(() => {
@@ -43,13 +64,22 @@ function MyBookings() {
       );
     }
 
+    function addNewBooking(newBooking) {
+      setBookings((bookings) => {
+        console.log([...bookings, newBooking]);
+        return [...bookings, newBooking];
+      });
+    }
+
     socket.on("updated booking", handleUpdate);
     socket.on("declined booking", handleDecline);
     socket.on("deleted booking", handleDelete);
+    socket.on("my new booking", addNewBooking);
     return () => {
       socket.off("updated booking", handleUpdate);
       socket.off("declined booking", handleDecline);
       socket.off("deleted booking", handleDelete);
+      socket.off("my new booking", addNewBooking);
     };
   }, []);
 

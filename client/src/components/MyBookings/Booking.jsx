@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useUserContext } from "../../UserContext";
 import styles from "./Booking.module.css";
 
@@ -21,7 +22,10 @@ function Booking({ booking, handleStatusUpdate }) {
       <div className={styles.detailContainer}>
         <div>
           <h3 className={styles.about}>
-            {booker.name} booked <b>{place.title}</b>
+            {booker.name.split(" ")[0]} booked
+            <Link to={`/places/${place?.slug}`}>
+              <b> {place.title}</b>
+            </Link>
           </h3>
           <span className={`${styles[bookingStatus]} ${styles.status}`}>
             {bookingStatus}

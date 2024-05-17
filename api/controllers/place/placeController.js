@@ -18,3 +18,12 @@ exports.getPlace = catchAsync(async (req, res, next) => {
     place,
   });
 });
+
+exports.getListings = catchAsync(async (req, res, next) => {
+  const { userId } = req.params;
+  const places = await Place.find({ owner: userId });
+  return res.status(200).json({
+    status: "success",
+    places,
+  });
+});
