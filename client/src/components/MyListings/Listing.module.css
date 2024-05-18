@@ -1,6 +1,6 @@
 .listing {
   display: flex;
-
+  position: relative;
   border-radius: 3px;
   overflow: hidden;
   -webkit-box-shadow: 0 0.94rem 2.5rem rgba(0, 0, 0, 0.1);
@@ -30,10 +30,10 @@
     linear,
     left top,
     right bottom,
-    from(#7dd56f),
-    to(#28b487)
+    from(rgba(26, 54, 93, 0.5)),
+    to(rgba(68, 92, 126, 0.1))
   );
-  background-image: linear-gradient(to right bottom, #7dd56f, #28b487);
+  background-image: var(--linear-grad);
   opacity: 0.7;
 }
 
@@ -51,6 +51,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   text-transform: uppercase;
+  color: var(--color-primary);
 }
 
 .aboutDetails > span:not(:last-child) {
@@ -59,4 +60,28 @@
 
 .details > *:not(:last-child) {
   margin-bottom: 2%;
+}
+
+.delBtn {
+  position: absolute;
+  padding: 0.5rem;
+  background-color: white;
+  right: 0;
+  background-color: var(--color-primary);
+  transition: background-color 0.2s;
+}
+
+.delBtn:hover {
+  background-color: var(--color-primary-light);
+}
+
+.delBtnIcon {
+  color: white !important;
+  fill: white !important;
+  transition: color 0.2s, fill 0.2s !important;
+}
+
+.delBtn:hover > .delBtnIcon {
+  color: rgb(255, 44, 44) !important;
+  fill: rgb(255, 44, 44) !important;
 }

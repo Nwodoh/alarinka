@@ -1,10 +1,10 @@
 .green {
   color: white !important;
-  background-color: #55c57a !important;
+  background-color: var(--color-primary) !important;
 }
 
 .green::after {
-  background-color: #55c57a !important;
+  background-color: var(--color-primary) !important;
 }
 
 .cta {
@@ -24,7 +24,7 @@
   -webkit-animation-fill-mode: backwards;
   animation-fill-mode: backwards;
   background-color: #fff;
-  color: #777;
+  color: var(--color-primary);
 }
 
 .cta:hover {

@@ -17,7 +17,7 @@ const userRoutes = require("./routers/userRoutes");
 const imageRoutes = require("./routers/imageRoutes");
 const placeRoutes = require("./routers/placeRoutes");
 const bookingRoutes = require("./routers/bookingRoutes");
-const userSocket = require("./controllers/user/userSocket");
+const placeSocket = require("./controllers/place/placeSocket");
 const bookingSocket = require("./controllers/booking/bookingSocket");
 const globalErrorHandler = require("./controllers/globalErrorHandler");
 
@@ -51,7 +51,11 @@ app.use(globalErrorHandler);
 io.on("connection", (socket) => {
   socket.on(
     "create place",
-    async (queryObj) => await userSocket.createPlace(socket, queryObj)
+    async (queryObj) => await placeSocket.createPlace(socket, queryObj)
+  );
+  socket.on(
+    "delete place",
+    async (queryObj) => await placeSocket.deletePlace(socket, queryObj)
   );
   socket.on(
     "create booking",

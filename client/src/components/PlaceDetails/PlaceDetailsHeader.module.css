@@ -29,10 +29,10 @@
     linear,
     left top,
     right bottom,
-    from(#7dd56f),
-    to(#28b487)
+    from(rgba(26, 54, 93, 0.5)),
+    to(rgba(68, 92, 126, 0.1))
   );
-  background-image: linear-gradient(to right bottom, #7dd56f, #28b487);
+  background-image: var(--linear-grad);
   opacity: 0.85;
 }
 
@@ -71,14 +71,10 @@
     linear,
     left top,
     right bottom,
-    from(rgba(125, 213, 111, 0.85)),
-    to(rgba(40, 180, 135, 0.85))
+    from(rgba(26, 54, 93, 0.85)),
+    to(rgba(68, 92, 126, 0.85))
   );
-  background-image: linear-gradient(
-    to bottom right,
-    rgba(125, 213, 111, 0.85),
-    rgba(40, 180, 135, 0.85)
-  );
+  background-image: var(--linear-grad-dark);
 }
 
 .details {

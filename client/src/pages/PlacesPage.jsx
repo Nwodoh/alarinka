@@ -83,7 +83,6 @@ export default function PlacesPage() {
       price,
       owner: user._id,
     };
-    console.log(addedPhotos);
     socket.emit("create place", placeData);
   }
 

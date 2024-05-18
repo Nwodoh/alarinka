@@ -2,8 +2,9 @@ import { Link } from "react-router-dom";
 import { useUserContext } from "../../UserContext";
 import { useTimeManager } from "../../hooks/useTimeManager";
 import styles from "./Listing.module.css";
+import Icons from "../Icons/Icons";
 
-function Listing({ listing }) {
+function Listing({ listing, handleDeletePlace }) {
   const { API_URL } = useUserContext();
   const {
     title,
@@ -14,6 +15,8 @@ function Listing({ listing }) {
     checkIn,
     checkOut,
     slug,
+    _id,
+    owner,
   } = listing;
   const mainImg = photos[0];
   const checkInTime = useTimeManager({ type: "numberToTime", value: checkIn });
@@ -53,6 +56,13 @@ function Listing({ listing }) {
           <div>Created on {new Date(createdAt).toDateString()}</div>
         </div>
       </div>
+
+      <button
+        className={styles.delBtn}
+        onClick={() => handleDeletePlace({ _id, title, owner })}
+      >
+        <Icons type="bin" iconClasses={styles.delBtnIcon} />
+      </button>
     </div>
   );
 }

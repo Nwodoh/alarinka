@@ -41,7 +41,7 @@
   cursor: pointer;
   padding: 0.781rem 1.88rem !important;
   font-size: 0.88rem !important;
-  background-color: #55c57a;
+  background-color: var(--color-primary);
   color: #fff;
 }
 

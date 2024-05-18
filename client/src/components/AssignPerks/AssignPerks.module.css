@@ -1,7 +1,7 @@
 .hasPerk {
-  fill: rgb(65, 201, 44);
+  fill: var(--color-primary);
 }
 
 .noPerk {
-  fill: rgb(255, 144, 144);
+  fill: var(--color-primary-light);
 }
