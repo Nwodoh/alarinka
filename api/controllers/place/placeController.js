@@ -3,7 +3,9 @@ const catchAsync = require("../../utilities/catchAsync");
 const AppError = require("../../utilities/AppError");
 
 exports.getAllPlaces = catchAsync(async (req, res, next) => {
-  const allPlaces = await Place.find();
+  const allPlaces = await Place.find().sort({
+    createdAt: -1,
+  });
   res.status(200).json({
     status: "success",
     places: allPlaces,
