@@ -66,7 +66,6 @@ function MyBookings() {
 
     function addNewBooking(newBooking) {
       setBookings((bookings) => {
-        console.log([...bookings, newBooking]);
         return [...bookings, newBooking];
       });
     }

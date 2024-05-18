@@ -31,13 +31,11 @@ export default function PhotosUploader({ addedPhotos, onChange }) {
         headers: { "Content-type": "multipart/form-data" },
       })
       .then((response) => {
-        console.log(response);
         const {
           data: { uploadedFiles: filenames },
         } = response;
 
         onChange((prev) => {
-          console.log([...prev, ...filenames]);
           return [...prev, ...filenames];
         });
       });

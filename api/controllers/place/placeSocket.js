@@ -34,7 +34,6 @@ exports.deletePlace = async function (socket, placeData) {
     const deletedPlace = await Place.findOneAndDelete({ _id, owner });
     if (!deletedPlace) socket.emit("deleted my place", placeData);
     if (Array.isArray(deletedPlace?.photos)) {
-      console.log(deletedPlace?.photos);
       deletedPlace.photos.forEach((photo) => {
         const filePath = `./${photo}`;
         delFile(filePath).catch((err) => {
