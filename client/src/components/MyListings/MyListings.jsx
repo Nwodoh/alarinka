@@ -5,8 +5,7 @@ import Listing from "./Listing";
 import { socket } from "../../socket";
 
 function MyListings() {
-  const { API_URL, user } = useUserContext();
-  const [myListings, setMyListings] = useState([]);
+  const { API_URL, user, myListings, setMyListings } = useUserContext();
 
   useEffect(() => {
     async function fetchListings() {

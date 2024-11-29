@@ -62,7 +62,7 @@ io.on("connection", (socket) => {
     async (queryObj) => await bookingSocket.createBooking(socket, queryObj)
   );
   socket.on(
-    "update status",
+    "update booking status",
     async (queryObj) => await bookingSocket.updateStatus(socket, queryObj)
   );
   socket.on("activate bookings notification", (userId) => {

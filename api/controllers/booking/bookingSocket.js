@@ -10,11 +10,15 @@ exports.createBooking = async (socket, queryObj) => {
         "Unable to create this booking. Please refresh and try again."
       );
 
-    const newBooking = await BookingModel.create({
+    const newBookingObj = await BookingModel.create({
       place: place._id,
       owner: owner._id,
       booker: user._id,
     });
+    const newBooking = await BookingModel.findById(newBookingObj._id)
+      .populate("booker")
+      .populate("place");
+    console.log(newBooking);
 
     const emailTransporter = new Email({
       place,
@@ -26,11 +30,7 @@ exports.createBooking = async (socket, queryObj) => {
     socket.emit("place booked", {
       message: `Your spot at ${place.title} has been booked successfully`,
     });
-    socket.to(owner._id).emit("my new booking", {
-      ...newBooking?._doc,
-      place,
-      booker: user,
-    });
+    socket.to(owner._id).emit("my new booking", newBooking);
   } catch (err) {
     let errMessage = err.message;
     if (err.code === 11000)
@@ -43,6 +43,7 @@ exports.createBooking = async (socket, queryObj) => {
 exports.updateStatus = async (socket, queryObj) => {
   const { status, bookingId } = queryObj;
 
+  console.log(status);
   try {
     if (status === "accepted") {
       const booking = await Booking.findByIdAndUpdate(
@@ -63,6 +64,7 @@ exports.updateStatus = async (socket, queryObj) => {
       await emailTransporter.acceptedBooking();
       socket.emit("updated booking", booking);
     } else if (status === "delete") {
+      console.log("delete", bookingId);
       await Booking.deleteOne({ _id: bookingId });
       return socket.emit("deleted booking", bookingId);
     } else {

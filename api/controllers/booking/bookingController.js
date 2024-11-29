@@ -43,6 +43,24 @@ exports.updateStatus = catchAsync(async (req, res, next) => {
   }
 });
 
+exports.getPayments = catchAsync(async (req, res, next) => {
+  const { owner } = req.params;
+  if (!owner)
+    return res.status(200).json({
+      status: "success",
+      payments: [],
+    });
+
+  const allPayments = await Booking.find({ owner })
+    .populate("booker")
+    .populate("place");
+
+  res.status(200).json({
+    status: "success",
+    payments: allPayments,
+  });
+});
+
 // exports.getBooking = catchAsync(async (req, res, next) => {
 //   const { owner } = req.params;
 //   const booking = await Booking.findOne({ owner }).populate("booker").populate('place');

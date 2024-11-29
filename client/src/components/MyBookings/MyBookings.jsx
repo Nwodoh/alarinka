@@ -5,38 +5,7 @@ import { useUserContext } from "../../UserContext";
 import { socket } from "../../socket";
 
 function MyBookings() {
-  const {
-    API_URL,
-    user,
-    notificationIsActive: { booking: bookingIsActive },
-    setNotificationIsActive,
-  } = useUserContext();
-  const [bookings, setBookings] = useState([]);
-
-  useEffect(() => {
-    async function getBookings() {
-      const res = await fetch(`${API_URL}/booking/${user._id}`);
-      const { bookings: allBookings } = await res.json();
-      setBookings(allBookings);
-    }
-    getBookings();
-  }, []);
-
-  useEffect(() => {
-    function activateNotification() {
-      const userId = user._id;
-      if (!userId || bookingIsActive) return;
-      socket.emit("activate bookings notification", userId);
-      setNotificationIsActive((notifications) => {
-        return { ...notifications, booking: true };
-      });
-    }
-    activateNotification();
-
-    return () => {
-      activateNotification();
-    };
-  }, []);
+  const { bookings, setBookings } = useUserContext();
 
   useEffect(() => {
     function handleUpdate(newBooking) {
@@ -88,9 +57,11 @@ function MyBookings() {
 
   return (
     <section>
-      <h1 className={styles.title}>
-        <span>Bookings</span>
-      </h1>
+      <div className={styles.heading}>
+        <h1 className={styles.title}>
+          <span>Bookings</span>
+        </h1>
+      </div>
       {bookings.length ? (
         <div className={styles.bookingContainer}>
           {bookings.map((booking, i) => (

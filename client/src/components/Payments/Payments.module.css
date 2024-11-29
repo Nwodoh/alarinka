@@ -1,10 +1,11 @@
 .heading {
   display: flex;
+  justify-content: space-between;
   margin: 0 2rem 2.5rem;
 }
 
 .title {
-  position: relative;
+  display: flex;
   font-size: 1.72rem;
   z-index: 10;
   color: #fff;
@@ -20,12 +21,33 @@
   background-image: var(--linear-grad-dark);
 }
 
-.bookingContainer {
+.paymentContainer {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
 }
 
-.bookingContainer > div {
+.paymentContainer > div {
   margin-bottom: 3rem;
+}
+
+.earnings {
+  margin: 0 2rem;
+}
+
+.totalEarnings {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  color: var(--color-primary);
+  font-size: 2.3rem;
+  text-transform: uppercase;
+  margin-top: 0.8rem;
+}
+
+.earningList {
+  display: flex;
+  gap: 1rem;
+  color: var(--color-primary);
+  font-size: 1.5rem;
 }

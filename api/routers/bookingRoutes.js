@@ -3,7 +3,8 @@ const router = express.Router();
 
 const bookingController = require("../controllers/booking/bookingController");
 
-router.route("/:owner").get(bookingController.getAllBookings);
 router.route("/").patch(bookingController.updateStatus);
+router.route("/:owner").get(bookingController.getAllBookings);
+router.route("/payments/:owner").get(bookingController.getPayments);
 
 module.exports = router;
