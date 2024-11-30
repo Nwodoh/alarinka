@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { useUserContext } from "../../UserContext";
 import styles from "./Payment.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { socket } from "../../socket";
 
 function Payment({ payment, handleStatusUpdate }) {
   const { API_URL } = useUserContext();
@@ -28,6 +29,21 @@ function Payment({ payment, handleStatusUpdate }) {
     else setIsAccepting(true);
   }
 
+  useEffect(function () {
+    function resetStates() {
+      setIsAccepting(false);
+      setIsLoading(false);
+    }
+    socket.on("updated payment", resetStates);
+    socket.on("deleted payment", resetStates);
+    socket.on("declined payment", resetStates);
+    return () => {
+      socket.off("updated payment", resetStates);
+      socket.off("declined payment", resetStates);
+      socket.off("deleted payment", resetStates);
+    };
+  }, []);
+
   return (
     <div className={styles.payment}>
       <div
@@ -51,7 +67,7 @@ function Payment({ payment, handleStatusUpdate }) {
           <span className={`${styles[paymentStatus]} ${styles.status}`}>
             {paymentStatus}
           </span>
-          <p>
+          <div>
             <div className={styles.pGap}>
               <span>
                 Guests: x{numGuests} (${place.price} each)
@@ -62,7 +78,7 @@ function Payment({ payment, handleStatusUpdate }) {
               <span>Total Price: </span>
               <span>${totalPrice}</span>
             </div>
-          </p>
+          </div>
         </div>
         <div className={styles.ctaContainer}>
           <div>Booked on {new Date(createdAt).toDateString()}</div>

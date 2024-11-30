@@ -83,6 +83,16 @@ export function UserContextProvider({ children }) {
   }, [user]);
 
   useEffect(() => {
+    function handleBookingUpdate(newBooking) {
+      const bookingId = newBooking?._id;
+      if (!bookingId) return;
+      setBookings((bookings) =>
+        bookings.map((booking) =>
+          booking._id !== bookingId ? booking : newBooking
+        )
+      );
+    }
+
     function handleUpdate(newBooking) {
       const bookingId = newBooking?._id;
       if (!bookingId) return;
@@ -95,15 +105,14 @@ export function UserContextProvider({ children }) {
 
     function handleDelete(bookingId) {
       if (!bookingId) return;
-      alert("deleted successfully");
       setPayments((bookings) =>
         bookings.filter((booking) => booking._id !== bookingId)
       );
     }
 
-    function handleDecline(bookingId) {
+    function handleBookingDelete(bookingId) {
       if (!bookingId) return;
-      setPayments((bookings) =>
+      setBookings((bookings) =>
         bookings.filter((booking) => booking._id !== bookingId)
       );
     }
@@ -124,21 +133,25 @@ export function UserContextProvider({ children }) {
       );
     }
 
-    socket.on("updated booking", handleUpdate);
-    socket.on("declined booking", handleDecline);
-    socket.on("deleted booking", handleDelete);
+    socket.on("updated booking", handleBookingUpdate);
+    socket.on("updated payment", handleUpdate);
+    socket.on("deleted booking", handleBookingDelete);
+    socket.on("deleted payment", handleDelete);
     socket.on("my new booking", addNewBooking);
     socket.on("new update", updatePlaces);
     socket.on("new place delete", removePlace);
     return () => {
-      socket.off("updated booking", handleUpdate);
-      socket.off("declined booking", handleDecline);
-      socket.off("deleted booking", handleDelete);
+      socket.off("updated booking", handleBookingUpdate);
+      socket.off("updated payment", handleUpdate);
+      socket.off("deleted booking", handleBookingDelete);
+      socket.off("deleted payment", handleDelete);
       socket.off("my new booking", addNewBooking);
       socket.off("new update", updatePlaces);
       socket.off("new place delete", removePlace);
     };
   }, []);
+
+  useEffect(function () {}, []);
 
   return (
     <UserContext.Provider

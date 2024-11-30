@@ -118,6 +118,8 @@
 
 .pGap {
   display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
+}
+
+.pGap > :not(:last-child) {
+  margin-right: 0.8rem;
 }

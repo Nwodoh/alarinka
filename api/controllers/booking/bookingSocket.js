@@ -37,8 +37,11 @@ exports.createBooking = async (socket, queryObj) => {
     await emailTransporter.setProp("to", owner.email).sendBookedMyPlace();
     socket.emit("place booked", {
       message: `Your spot at ${place.title} has been booked successfully`,
+      newBooking,
     });
     socket.to(owner._id).emit("my new booking", newBooking);
+    String(owner._id) == String(user._id) &&
+      socket.emit("my new booking", newBooking);
   } catch (err) {
     let errMessage = err.message;
     if (err.code === 11000)
@@ -69,10 +72,20 @@ exports.updateStatus = async (socket, queryObj) => {
       });
 
       await emailTransporter.acceptedBooking();
-      socket.emit("updated booking", booking);
+      socket.emit("updated payment", booking);
+      socket.to(String(booking.booker._id)).emit("updated booking", booking);
+      String(booking.owner._id) == String(booking.booker._id) &&
+        socket.emit("updated booking", booking);
     } else if (status === "delete") {
-      await Booking.deleteOne({ _id: bookingId });
-      return socket.emit("deleted booking", bookingId);
+      const { booker, owner } = await Booking.findOneAndDelete({
+        _id: bookingId,
+      });
+      if (!booker) return;
+      socket.emit("deleted payment", bookingId);
+      socket.to(String(booker)).emit("deleted booking", bookingId);
+      String(owner._id) == String(booker._id) &&
+        socket.emit("deleted booking", bookingId);
+      return;
     } else {
       const {
         place,
@@ -89,7 +102,11 @@ exports.updateStatus = async (socket, queryObj) => {
         user,
       });
       await emailTransporter.rejectedBooking();
-      return socket.emit("declined booking", bookingId);
+      socket.emit("deleted payment", bookingId);
+      socket.to(String(user._id)).emit("deleted booking", bookingId);
+      String(owner._id) == String(user._id) &&
+        socket.emit("deleted booking", bookingId);
+      return;
     }
   } catch (err) {
     console.log(err.message);

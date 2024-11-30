@@ -5,51 +5,7 @@ import { useUserContext } from "../../UserContext";
 import { socket } from "../../socket";
 
 function MyBookings() {
-  const { bookings, setBookings } = useUserContext();
-
-  useEffect(() => {
-    function handleUpdate(newBooking) {
-      const bookingId = newBooking?._id;
-      if (!bookingId) return;
-      setBookings((bookings) =>
-        bookings.map((booking) =>
-          booking._id !== bookingId ? booking : newBooking
-        )
-      );
-    }
-
-    function handleDelete(bookingId) {
-      if (!bookingId) return;
-      alert("deleted successfully");
-      setBookings((bookings) =>
-        bookings.filter((booking) => booking._id !== bookingId)
-      );
-    }
-
-    function handleDecline(bookingId) {
-      if (!bookingId) return;
-      setBookings((bookings) =>
-        bookings.filter((booking) => booking._id !== bookingId)
-      );
-    }
-
-    function addNewBooking(newBooking) {
-      setBookings((bookings) => {
-        return [...bookings, newBooking];
-      });
-    }
-
-    socket.on("updated booking", handleUpdate);
-    socket.on("declined booking", handleDecline);
-    socket.on("deleted booking", handleDelete);
-    socket.on("my new booking", addNewBooking);
-    return () => {
-      socket.off("updated booking", handleUpdate);
-      socket.off("declined booking", handleDecline);
-      socket.off("deleted booking", handleDelete);
-      socket.off("my new booking", addNewBooking);
-    };
-  }, []);
+  const { bookings } = useUserContext();
 
   function handleStatusUpdate(queryObj) {
     socket.emit("update status", queryObj);
@@ -59,18 +15,21 @@ function MyBookings() {
     <section>
       <div className={styles.heading}>
         <h1 className={styles.title}>
-          <span>Bookings</span>
+          <span>My Bookings</span>
         </h1>
       </div>
       {bookings.length ? (
         <div className={styles.bookingContainer}>
-          {bookings.map((booking, i) => (
-            <Booking
-              booking={booking}
-              handleStatusUpdate={handleStatusUpdate}
-              key={i}
-            />
-          ))}
+          {bookings
+            .slice()
+            .reverse()
+            .map((booking, i) => (
+              <Booking
+                booking={booking}
+                handleStatusUpdate={handleStatusUpdate}
+                key={String(booking._id)}
+              />
+            ))}
         </div>
       ) : (
         <h1 className={styles.title}>

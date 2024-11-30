@@ -11,7 +11,7 @@ import PlaceBookingForm from "./PlaceBookingForm";
 function PlaceDetails() {
   const navigate = useNavigate();
   const { slug } = useParams();
-  const { API_URL, user } = useUserContext();
+  const { API_URL, user, setBookings } = useUserContext();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [place, setPlace] = useState({ photos: [], perks: [], owner: {} });
   const {
@@ -51,6 +51,7 @@ function PlaceDetails() {
     }
     function handlePlaceBooked(data) {
       alert(data.message);
+      setBookings((bookings) => [...bookings, data.newBooking]);
     }
 
     socket.on("create booking error", handleBookingError);

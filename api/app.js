@@ -68,7 +68,8 @@ io.on("connection", (socket) => {
   socket.on("activate bookings notification", (userId) => {
     const MAX_ROOM_SIZE = 1;
     const roomSize = io.sockets.adapter.rooms[userId]?.length || 0;
-    if (roomSize >= MAX_ROOM_SIZE) return;
+    // if (roomSize >= MAX_ROOM_SIZE) return;
+    console.log("JOINED ROOM: ", userId);
     socket.join(userId);
   });
   socket.on("disconnect", () => {});
