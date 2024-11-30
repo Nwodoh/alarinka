@@ -12,7 +12,7 @@ function PlaceDetailsHeader({
   checkOut,
   owner,
   price,
-  handleBookPlace,
+  setModalIsOpen,
 }) {
   const { API_URL } = useUserContext();
   const checkInTime = useTimeManager({ type: "numberToTime", value: checkIn });
@@ -49,7 +49,7 @@ function PlaceDetailsHeader({
         </div>
         <div className={styles.ctaContainer}>
           <div className={styles.price}>${price}</div>
-          <CtaBtn onClick={() => handleBookPlace()}>Book Now!</CtaBtn>
+          <CtaBtn onClick={() => setModalIsOpen(true)}>Book Now!</CtaBtn>
         </div>
       </div>
     </section>

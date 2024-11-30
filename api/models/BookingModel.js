@@ -18,6 +18,8 @@ const bookingSchema = new mongoose.Schema(
       required: true,
     },
     numGuests: { type: Number, default: 1 },
+    numNights: { type: Number, default: 1 },
+    startDate: Date,
     status: {
       type: String,
       enum: ["accepted", "unseen", "pending"],
@@ -37,7 +39,7 @@ const bookingSchema = new mongoose.Schema(
 bookingSchema.index({ place: 1, booker: 1 }, { unique: true });
 
 bookingSchema.virtual("totalPrice").get(function () {
-  return this.numGuests * this.place.price;
+  return this.numGuests * this.place.price * this.numNights;
 });
 
 const Booking = mongoose.model("Booking", bookingSchema);

@@ -10,7 +10,7 @@ function PlaceDetailsDescription({
   perks,
   owner,
   price,
-  handleBookPlace,
+  setModalIsOpen,
 }) {
   return (
     <section className={styles.container}>
@@ -26,7 +26,7 @@ function PlaceDetailsDescription({
         <div className={styles.overviewGroup}>
           <div className={styles.ctaContainer}>
             <div className={styles.price}>${price}</div>
-            <CtaBtn type="green" onClick={() => handleBookPlace()}>
+            <CtaBtn type="green" onClick={() => setModalIsOpen(true)}>
               Book Now!
             </CtaBtn>
           </div>

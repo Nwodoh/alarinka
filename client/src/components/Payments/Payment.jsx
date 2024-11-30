@@ -1,18 +1,32 @@
 import { Link } from "react-router-dom";
 import { useUserContext } from "../../UserContext";
 import styles from "./Payment.module.css";
+import { useState } from "react";
 
 function Payment({ payment, handleStatusUpdate }) {
   const { API_URL } = useUserContext();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isAccepting, setIsAccepting] = useState(false);
   const {
     _id: paymentId,
     place,
     booker,
     createdAt,
     numGuests,
+    numNights,
     totalPrice,
   } = payment;
   let paymentStatus = payment.status === "accepted" ? "accepted" : "pending";
+
+  function handleUpdateAndIsLoading({ status, bookingId }) {
+    handleStatusUpdate({
+      status,
+      bookingId,
+    });
+
+    if (status !== "accepted") setIsLoading(true);
+    else setIsAccepting(true);
+  }
 
   return (
     <div className={styles.payment}>
@@ -37,15 +51,17 @@ function Payment({ payment, handleStatusUpdate }) {
           <span className={`${styles[paymentStatus]} ${styles.status}`}>
             {paymentStatus}
           </span>
-          <p className={styles.pGap}>
-            <span>
-              <span>Guests: </span>
-              <span>x{numGuests}</span>
-            </span>
-            <span>
+          <p>
+            <div className={styles.pGap}>
+              <span>
+                Guests: x{numGuests} (${place.price} each)
+              </span>
+              <span>Nights: x{numNights}</span>
+            </div>
+            <div>
               <span>Total Price: </span>
               <span>${totalPrice}</span>
-            </span>
+            </div>
           </p>
         </div>
         <div className={styles.ctaContainer}>
@@ -55,22 +71,24 @@ function Payment({ payment, handleStatusUpdate }) {
               <>
                 <button
                   onClick={() =>
-                    handleStatusUpdate({
+                    handleUpdateAndIsLoading({
                       status: "decline",
                       bookingId: paymentId,
                     })
                   }
+                  disabled={isLoading}
                   className={`${styles.cta} ${styles.ctaPending}`}
                 >
                   Decline
                 </button>
                 <button
                   onClick={() =>
-                    handleStatusUpdate({
+                    handleUpdateAndIsLoading({
                       status: "accepted",
                       bookingId: paymentId,
                     })
                   }
+                  disabled={isLoading || isAccepting}
                   className={styles.cta}
                 >
                   Accept
@@ -79,8 +97,12 @@ function Payment({ payment, handleStatusUpdate }) {
             ) : (
               <button
                 onClick={() =>
-                  handleStatusUpdate({ status: "delete", bookingId: paymentId })
+                  handleUpdateAndIsLoading({
+                    status: "delete",
+                    bookingId: paymentId,
+                  })
                 }
+                disabled={isLoading}
                 className={`${styles.cta} ${styles.ctaDelete}`}
               >
                 Delete

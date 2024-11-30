@@ -4,7 +4,13 @@ const Email = require("../../utilities/Email");
 
 exports.createBooking = async (socket, queryObj) => {
   try {
-    const { place, owner, user } = queryObj;
+    const {
+      place,
+      owner,
+      user,
+      bookingData: { numNights, startDate, numGuests },
+    } = queryObj;
+
     if (!place._id || !owner._id || !user._id)
       throw new Error(
         "Unable to create this booking. Please refresh and try again."
@@ -14,11 +20,13 @@ exports.createBooking = async (socket, queryObj) => {
       place: place._id,
       owner: owner._id,
       booker: user._id,
+      numNights,
+      startDate,
+      numGuests,
     });
     const newBooking = await BookingModel.findById(newBookingObj._id)
       .populate("booker")
       .populate("place");
-    console.log(newBooking);
 
     const emailTransporter = new Email({
       place,
@@ -43,7 +51,6 @@ exports.createBooking = async (socket, queryObj) => {
 exports.updateStatus = async (socket, queryObj) => {
   const { status, bookingId } = queryObj;
 
-  console.log(status);
   try {
     if (status === "accepted") {
       const booking = await Booking.findByIdAndUpdate(
@@ -64,7 +71,6 @@ exports.updateStatus = async (socket, queryObj) => {
       await emailTransporter.acceptedBooking();
       socket.emit("updated booking", booking);
     } else if (status === "delete") {
-      console.log("delete", bookingId);
       await Booking.deleteOne({ _id: bookingId });
       return socket.emit("deleted booking", bookingId);
     } else {

@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import styles from "./Payments.module.css";
 import { useUserContext } from "../../UserContext";
 import { socket } from "../../socket";
@@ -18,7 +17,6 @@ function Payments() {
   );
 
   function handleStatusUpdate(queryObj) {
-    console.log(queryObj);
     socket.emit("update booking status", queryObj);
   }
 
@@ -32,28 +30,31 @@ function Payments() {
       {payments?.length ? (
         <div>
           <div className={styles.paymentContainer}>
-            {payments.map((payment, i) => (
-              <Payment
-                payment={payment}
-                handleStatusUpdate={handleStatusUpdate}
-                key={i}
-              />
-            ))}
+            {payments
+              .slice()
+              .reverse()
+              .map((payment, i) => (
+                <Payment
+                  payment={payment}
+                  handleStatusUpdate={handleStatusUpdate}
+                  key={i}
+                />
+              ))}
           </div>
           <div className={styles.earnings}>
-            <div className={styles.earningList}>
-              <h1>Pending Earnings: </h1>
-              <span>${pendingEarnings}</span>
-            </div>
-            <div className={styles.earningList}>
-              <h1>Accepted Earnings: </h1>
-              <span>${acceptedEarnings}</span>
-            </div>
             <div className={styles.totalEarnings}>
               <h1 className={styles.title}>
                 <span>Total earnings:</span>
               </h1>
               <span>${totalEarnings || 0}</span>
+            </div>
+            <div className={styles.earningList}>
+              <h1>Accepted Earnings: </h1>
+              <span>${acceptedEarnings}</span>
+            </div>
+            <div className={styles.earningList}>
+              <h1>Pending Earnings: </h1>
+              <span>${pendingEarnings}</span>
             </div>
           </div>
         </div>

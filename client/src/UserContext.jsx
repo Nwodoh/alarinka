@@ -14,6 +14,7 @@ export function UserContextProvider({ children }) {
   const [notificationIsActive, setNotificationIsActive] = useState({
     booking: false,
   });
+
   const API_URL = "http://localhost:4000";
 
   useEffect(() => {
@@ -108,7 +109,6 @@ export function UserContextProvider({ children }) {
     }
 
     function addNewBooking(newBooking) {
-      console.log({ newBooking });
       setPayments((bookings) => {
         return [...bookings, newBooking];
       });

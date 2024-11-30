@@ -1,16 +1,18 @@
 import { useNavigate, useParams } from "react-router-dom";
-import styles from "./PlaceDetails.module.css";
 import { useEffect, useState } from "react";
 import { useUserContext } from "../../UserContext";
 import PlaceDetailsHeader from "./PlaceDetailsHeader";
 import PlaceDetailsDescription from "./PlaceDetailsDescription";
 import PlaceDetailsImages from "./PlaceDetailsImages";
 import { socket } from "../../socket";
+import Modal from "../Modal/Modal";
+import PlaceBookingForm from "./PlaceBookingForm";
 
 function PlaceDetails() {
   const navigate = useNavigate();
   const { slug } = useParams();
   const { API_URL, user } = useUserContext();
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const [place, setPlace] = useState({ photos: [], perks: [], owner: {} });
   const {
     title,
@@ -60,7 +62,7 @@ function PlaceDetails() {
     };
   }, []);
 
-  function handleBookPlace() {
+  function handleBookPlace(bookingData) {
     const bookerId = user?._id;
     if (!bookerId) {
       alert("Log in to book this place!.");
@@ -71,11 +73,23 @@ function PlaceDetails() {
       place,
       owner,
       user,
+      bookingData,
     });
+    setModalIsOpen(false);
   }
 
   return (
     <div>
+      {modalIsOpen && (
+        <Modal isOpen={modalIsOpen} setIsOpen={setModalIsOpen}>
+          <PlaceBookingForm
+            price={price}
+            maxGuests={maxGuests}
+            handleBookPlace={handleBookPlace}
+            checkIn={checkIn}
+          />
+        </Modal>
+      )}
       <PlaceDetailsHeader
         title={title}
         address={address}
@@ -85,7 +99,7 @@ function PlaceDetails() {
         checkOut={checkOut}
         owner={owner}
         price={price}
-        handleBookPlace={handleBookPlace}
+        setModalIsOpen={setModalIsOpen}
       />
       <PlaceDetailsDescription
         title={title}
@@ -96,7 +110,7 @@ function PlaceDetails() {
         checkIn={checkIn}
         checkOut={checkOut}
         price={price}
-        handleBookPlace={handleBookPlace}
+        setModalIsOpen={setModalIsOpen}
       />
       <PlaceDetailsImages photos={photos} />
     </div>

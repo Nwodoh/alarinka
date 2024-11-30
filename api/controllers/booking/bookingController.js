@@ -3,14 +3,16 @@ const catchAsync = require("../../utilities/catchAsync");
 const AppError = require("../../utilities/AppError");
 
 exports.getAllBookings = catchAsync(async (req, res, next) => {
-  const { owner } = req.params;
-  if (!owner)
+  const { booker } = req.params;
+  if (!booker)
     return res.status(200).json({
       status: "success",
       bookings: [],
     });
 
-  const allBookings = await Booking.find({ owner })
+  console.log(booker);
+
+  const allBookings = await Booking.find({ booker })
     .populate("booker")
     .populate("place");
 

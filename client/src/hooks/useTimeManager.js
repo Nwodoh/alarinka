@@ -20,6 +20,13 @@ function useTimeManager({ type, value }) {
       const time = hour + ":" + (minute < 10 ? "0" : "") + minute + meridiem;
       return time;
     }
+    case "formatDateForInput": {
+      const year = value.getFullYear();
+      const month = String(value.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+      const day = String(value.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
     default:
       throw new Error(`No such api exist as ${type}`);
   }

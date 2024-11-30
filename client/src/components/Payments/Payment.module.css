@@ -12,8 +12,8 @@
 
 .picture {
   position: relative;
-  height: 9rem;
-  width: 9rem;
+  height: 168px;
+  width: 168px;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -101,6 +101,11 @@
 
 .cta:not(:last-child) {
   margin-right: 0.7rem;
+}
+
+.cta:disabled {
+  filter: grayscale(0.7);
+  cursor: not-allowed;
 }
 
 .ctaPending {
