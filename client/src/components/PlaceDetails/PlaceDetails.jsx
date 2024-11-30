@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import styles from "./PlaceDetails.module.css";
 import { useUserContext } from "../../UserContext";
 import PlaceDetailsHeader from "./PlaceDetailsHeader";
 import PlaceDetailsDescription from "./PlaceDetailsDescription";
@@ -14,20 +15,6 @@ function PlaceDetails() {
   const { API_URL, user, setBookings } = useUserContext();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [place, setPlace] = useState({ photos: [], perks: [], owner: {} });
-  const {
-    title,
-    owner,
-    address,
-    photos,
-    description,
-    perks,
-    extraInfo,
-    checkIn,
-    checkOut,
-    maxGuests,
-    price,
-    _id: placeId,
-  } = place;
 
   useEffect(() => {
     async function getPlace() {
@@ -78,6 +65,28 @@ function PlaceDetails() {
     });
     setModalIsOpen(false);
   }
+
+  if (!place?._id)
+    return (
+      <h1 className={styles.title}>
+        <span>Could not find {slug?.replaceAll?.("-", " ")} on our server</span>
+      </h1>
+    );
+
+  const {
+    title,
+    owner,
+    address,
+    photos,
+    description,
+    perks,
+    extraInfo,
+    checkIn,
+    checkOut,
+    maxGuests,
+    price,
+    _id: placeId,
+  } = place;
 
   return (
     <div>

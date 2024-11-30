@@ -1,0 +1,17 @@
+.title {
+  display: flex;
+  font-size: 1.72rem;
+  z-index: 10;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 300;
+  margin: 3rem 1.5rem;
+}
+
+.title span {
+  padding: 0.625rem 0.94rem;
+  line-height: 1;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  background-image: var(--linear-grad-dark);
+}
