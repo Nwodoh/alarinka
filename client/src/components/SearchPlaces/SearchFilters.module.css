@@ -1,0 +1,97 @@
+.filterWrapper {
+  position: absolute;
+  display: flex;
+  gap: 1rem;
+  bottom: -6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: bottom 0.2s, opacity 0.2s, visibility 0.2s;
+}
+
+.filterWrapperActive {
+  bottom: -4.3rem;
+  opacity: 1;
+  visibility: visible;
+}
+
+.filterItem {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  background-color: white;
+  max-width: 6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.3rem;
+  flex-direction: column;
+  padding: 0.4rem 0.4rem;
+  border-radius: 5px;
+}
+
+.filterItem > label {
+  color: var(--color-primary);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  line-height: 0.8;
+}
+
+.filterItem > input {
+  margin: 0 !important;
+  background-color: transparent !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  width: auto !important;
+  max-width: 100%;
+  background-color: transparent;
+  border: none;
+  border-bottom: 0.2rem solid var(--color-primary) !important;
+  outline: none;
+  color: var(--color-primary);
+  border-radius: 1rem;
+}
+
+.perksWrapper {
+  display: flex;
+  flex-grow: 1;
+  gap: 0.4rem;
+  background-color: var(--color-primary-light);
+  padding: 0.4rem 0.5rem;
+  border-radius: 6rem;
+}
+
+.perksWrapper > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.1s;
+}
+
+.perksWrapper > span:hover {
+  background-color: white;
+}
+
+.perksWrapper > span:hover > svg {
+  fill: var(--color-primary);
+}
+
+.perksWrapper > span.perkActive {
+  background-color: var(--color-primary);
+}
+
+.perksWrapper > span.perkActive > svg {
+  fill: white;
+}
+
+.perksWrapper > span > svg {
+  fill: var(--color-primary);
+  width: 16px;
+  height: 16px;
+  transition: fill 0.2s;
+}

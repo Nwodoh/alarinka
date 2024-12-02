@@ -15,6 +15,10 @@ axios.defaults.baseURL = "http://localhost:4000/";
 axios.defaults.withCredentials = true;
 
 function App() {
+  useEffect(function () {
+    document.body.style.zoom = "90%";
+  }, []);
+
   return (
     <UserContextProvider>
       <Routes>

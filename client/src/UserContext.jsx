@@ -14,6 +14,14 @@ export function UserContextProvider({ children }) {
   const [notificationIsActive, setNotificationIsActive] = useState({
     booking: false,
   });
+  const allPerks = ["wifi", "parking", "tv", "pets", "food", "entrance"];
+  const initialPlaceQuery = {
+    query: "",
+    perks: [],
+    maxGuests: 0,
+    maxPrice: 0,
+  };
+  const [searchPlaceQuery, setSearchPlaceQuery] = useState(initialPlaceQuery);
 
   const API_URL = "http://localhost:4000";
 
@@ -170,6 +178,10 @@ export function UserContextProvider({ children }) {
         API_URL,
         notificationIsActive,
         setNotificationIsActive,
+        searchPlaceQuery,
+        setSearchPlaceQuery,
+        allPerks,
+        initialPlaceQuery,
       }}
     >
       {children}
