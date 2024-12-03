@@ -71,7 +71,7 @@ module.exports = class Email {
       text: this.message,
     };
 
-    // await this.newTransport().sendMail(mailOptions);
+    await this.newTransport().sendMail(mailOptions);
   }
 
   async sendBookedPlace() {
