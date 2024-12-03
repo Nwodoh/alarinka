@@ -7,11 +7,20 @@ import SearchFilters from "./SearchFilters";
 function SearchPlaces() {
   const { searchPlaceQuery, setSearchPlaceQuery, initialPlaceQuery } =
     useUserContext();
-  const { query } = searchPlaceQuery;
-  const [isFocused, setIsFocused] = useState(!!query);
+  const { query, perks, maxGuests, maxPrice } = searchPlaceQuery;
+  const shouldBeShown = !!query || !!perks?.length || !!maxGuests || !!maxPrice;
+  const [isFocused, setIsFocused] = useState(shouldBeShown);
 
   return (
-    <div className="relative">
+    <div
+      className="relative"
+      tabIndex={0}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => {
+        setIsFocused(shouldBeShown);
+        console.log("BLURRED");
+      }}
+    >
       <div
         className={`${styles.inputWrapper} ${
           isFocused ? styles.inputWrapperFocused : ""
@@ -32,7 +41,6 @@ function SearchPlaces() {
               query: e.target.value,
             }))
           }
-          onFocus={() => setIsFocused(true)}
           placeholder="Search for places"
         />
         <div
@@ -45,10 +53,7 @@ function SearchPlaces() {
           <span>&times;</span>
         </div>
       </div>
-      <SearchFilters
-        showFilters={isFocused}
-        onClick={() => setIsFocused(true)}
-      />
+      <SearchFilters showFilters={isFocused} />
     </div>
   );
 }

@@ -2,7 +2,7 @@ import { useUserContext } from "../../UserContext";
 import Icons from "../Icons/Icons";
 import styles from "./SearchFilters.module.css";
 
-function SearchFilters({ showFilters, onClick }) {
+function SearchFilters({ showFilters }) {
   const { allPerks, searchPlaceQuery, setSearchPlaceQuery } = useUserContext();
   const { perks: queryPerks, maxGuests, maxPrice } = searchPlaceQuery;
 
@@ -11,10 +11,9 @@ function SearchFilters({ showFilters, onClick }) {
       className={`${styles.filterWrapper} ${
         showFilters ? styles.filterWrapperActive : ""
       }`}
-      onClick={onClick}
     >
-      <label htmlFor="price-filter" className={styles.filterItem}>
-        <label htmlFor="price-filter">Max Price</label>
+      <label className={styles.filterItem}>
+        <p>Max Price</p>
         <input
           type="number"
           name="priceFilter"
@@ -32,7 +31,7 @@ function SearchFilters({ showFilters, onClick }) {
         />
       </label>
       <label className={styles.filterItem}>
-        <label htmlFor="guest-filter">Max Guests</label>
+        <p>Max Guests</p>
         <input
           type="number"
           name="guestFilter"
@@ -48,14 +47,16 @@ function SearchFilters({ showFilters, onClick }) {
           }
         />
       </label>
-      <label className={`${styles.filterItem} max-w-none`}>
-        <label htmlFor="perks-filter">Perks</label>
-        <input type="hidden" id="perks-filter" />
+      <label
+        htmlFor="no-filter-perks"
+        className={`${styles.filterItem} max-w-none`}
+      >
+        <p>Perks</p>
         <div className={styles.perksWrapper}>
           {allPerks.map((perk) => {
             const isSelected = queryPerks.includes(perk);
             return (
-              <span
+              <button
                 key={perk}
                 className={isSelected ? styles.perkActive : ""}
                 onClick={() =>
@@ -68,7 +69,7 @@ function SearchFilters({ showFilters, onClick }) {
                 }
               >
                 <Icons type={perk} />
-              </span>
+              </button>
             );
           })}
         </div>

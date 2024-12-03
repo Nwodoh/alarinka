@@ -30,7 +30,7 @@
   border-radius: 5px;
 }
 
-.filterItem > label {
+.filterItem > p {
   color: var(--color-primary);
   font-size: 10px;
   font-weight: 600;
@@ -62,34 +62,35 @@
   border-radius: 6rem;
 }
 
-.perksWrapper > span {
+.perksWrapper > button {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 25px;
   height: 25px;
+  border: 0;
   border-radius: 50%;
   cursor: pointer;
   transition: background-color 0.1s;
 }
 
-.perksWrapper > span:hover {
+.perksWrapper > button:hover {
   background-color: white;
 }
 
-.perksWrapper > span:hover > svg {
+.perksWrapper > button:hover > svg {
   fill: var(--color-primary);
 }
 
-.perksWrapper > span.perkActive {
+.perksWrapper > button.perkActive {
   background-color: var(--color-primary);
 }
 
-.perksWrapper > span.perkActive > svg {
+.perksWrapper > button.perkActive > svg {
   fill: white;
 }
 
-.perksWrapper > span > svg {
+.perksWrapper > button > svg {
   fill: var(--color-primary);
   width: 16px;
   height: 16px;
