@@ -1,0 +1,44 @@
+.profile input {
+  margin: 0 !important;
+  width: auto !important;
+  background-color: var(--color-primary-light) !important;
+  padding: 0.5rem !important;
+  font-size: 18px;
+  border-radius: 5px !important;
+  cursor: pointer;
+}
+
+.imageWrapper {
+  position: relative;
+  background-image: var(--linear-grad);
+}
+
+.imageWrapper > span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: var(--linear-grad);
+  opacity: 0.8;
+}
+
+.title {
+  display: flex;
+  font-size: 1.72rem;
+  z-index: 10;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 300;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.title span {
+  padding: 0.625rem 0.94rem;
+  line-height: 1;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  background-color: var(--color-primary);
+}

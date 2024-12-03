@@ -1,10 +1,10 @@
 import { useContext, useState } from "react";
 import { useUserContext } from "../UserContext";
 import { Link, Navigate, useParams } from "react-router-dom";
-import axios from "axios";
 import PlacesPage from "./PlacesPage";
 import MyBookings from "../components/MyBookings/MyBookings";
 import Payments from "../components/Payments/Payments";
+import Profile from "../components/Profile/Profile";
 
 export default function AccountPage() {
   const [redirect, setRedirect] = useState(null);
@@ -29,15 +29,6 @@ export default function AccountPage() {
     return <Navigate to={redirect} />;
   }
 
-  async function logout() {
-    await fetch(`${API_URL}/user/logout`, {
-      method: "GET",
-      credentials: "include",
-    });
-    setUser(null);
-    setRedirect("/");
-  }
-
   if (!ready) {
     return "Loading...";
   }
@@ -48,7 +39,7 @@ export default function AccountPage() {
 
   return (
     <div>
-      <nav className="w-full flex justify-center my-8 gap-2">
+      <nav className="w-full flex justify-center mb-8 gap-2">
         <Link className={linkClasses("profile")} to={"/account"}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -111,14 +102,7 @@ export default function AccountPage() {
           My listings
         </Link>
       </nav>
-      {subpage === "profile" && (
-        <div className="text-center max-w-lg mx-auto">
-          Logged in as {user.name} ({user.email}) <br />
-          <button className="primary" onClick={logout}>
-            Logout
-          </button>
-        </div>
-      )}
+      {subpage === "profile" && <Profile setRedirect={setRedirect} />}
       {subpage === "bookings" && <MyBookings />}
       {subpage === "payments" && <Payments />}
       {subpage === "places" && <PlacesPage />}
