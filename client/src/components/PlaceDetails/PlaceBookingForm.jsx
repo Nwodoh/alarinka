@@ -68,6 +68,10 @@ function PlaceBookingForm({ maxGuests, price, handleBookPlace, checkIn }) {
           </label>
           <input
             type="date"
+            min={useTimeManager({
+              type: "formatDateForInput",
+              value: new Date(),
+            })}
             value={startDate}
             id="startDate"
             onChange={(e) => setStartDate(e.target.value)}
