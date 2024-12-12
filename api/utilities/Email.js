@@ -30,24 +30,24 @@ module.exports = class Email {
 
   newTransport() {
     // USE SENDGRID IF IN "PRODUCTION"
-    if (NODE_ENV === "production") {
-      return nodemailer.createTransport({
-        service: "SendGrid",
-        auth: {
-          user: SENDGRID_USERNAME,
-          pass: SENDGRID_PASSWORD,
-        },
-      });
-    }
-
+    // if (NODE_ENV === "production") {
     return nodemailer.createTransport({
-      host: EMAIL_HOST,
-      port: EMAIL_PORT,
+      service: "SendGrid",
       auth: {
-        user: EMAIL_USER,
-        pass: EMAIL_PASSWORD,
+        user: SENDGRID_USERNAME,
+        pass: SENDGRID_PASSWORD,
       },
     });
+    // }
+
+    // return nodemailer.createTransport({
+    //   host: EMAIL_HOST,
+    //   port: EMAIL_PORT,
+    //   auth: {
+    //     user: EMAIL_USER,
+    //     pass: EMAIL_PASSWORD,
+    //   },
+    // });
   }
 
   async send(template, subject) {
@@ -71,7 +71,11 @@ module.exports = class Email {
       text: this.message,
     };
 
-    await this.newTransport().sendMail(mailOptions);
+    try {
+      await this.newTransport().sendMail(mailOptions);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   async sendBookedPlace() {
