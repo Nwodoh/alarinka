@@ -6,6 +6,7 @@ export const UserContext = createContext({});
 // eslint-disable-next-line react/prop-types
 export function UserContextProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [authUser, setAuthUser] = useState({ email: "", name: "" });
   const [places, setPlaces] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [payments, setPayments] = useState([]);
@@ -166,6 +167,8 @@ export function UserContextProvider({ children }) {
       value={{
         user,
         setUser,
+        authUser,
+        setAuthUser,
         places,
         setPlaces,
         bookings,

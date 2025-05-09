@@ -5,6 +5,9 @@ const bcrypt = require("bcryptjs");
 const User = require("../../models/User");
 const catchAsync = require("../../utilities/catchAsync");
 const AppError = require("../../utilities/AppError");
+const redis = require("../../utilities/MockRedis");
+const { generateRandomToken } = require("../../utilities/helpers");
+const Email = require("../../utilities/Email");
 
 const bcryptSalt = bcrypt.genSaltSync(10);
 
@@ -35,11 +38,59 @@ const createSendToken = (res, user, statusCode) => {
   });
 };
 
+exports.sendEmailOtp = catchAsync(async (req, res, next) => {
+  const { email, name = "user" } = req.body;
+  const otpType = req.query?.otpType || "verify-email";
+  if (!email)
+    return next(
+      new AppError(
+        "Please provide your email address to get a verification email.",
+        400
+      )
+    );
+
+  const token = generateRandomToken();
+  const emailKey = process.env.EMAIL_CACHE_KEY + email;
+  await redis.set(emailKey, token, "ex", process.env.REDIS_VERIFICATION_EXP);
+
+  try {
+    console.log({ emailKey, token });
+    await new Email({
+      user: { email, name },
+      otp: token,
+    })[
+      otpType === "verify-email"
+        ? "sendEmailVerificationOTP"
+        : "sendPasswordReset"
+    ]();
+  } catch (err) {
+    console.error(err);
+    return next(
+      new AppError(
+        "There was a short server error, please try again and if problem persist, contact the Alarinka customer service."
+      )
+    );
+  }
+
+  res.status(200).json({
+    status: "success",
+    message: `6 digit otp has been sent to ${email}.\nThis might take some minute.`,
+  });
+});
+
 exports.register = catchAsync(async (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, otp } = req.body;
   if (!name) return next(new AppError("No name specified"), 401);
   if (!email) return next(new AppError("No email specified"));
   if (!password) return next(new AppError("No password specified"));
+
+  const emailKey = process.env.EMAIL_CACHE_KEY + email;
+  const originalToken = await redis.get(emailKey);
+
+  if (!originalToken) return next(new AppError("Your token expired.", 404));
+
+  if (otp !== originalToken)
+    return next(new AppError("Incorrect token. Try again."));
 
   try {
     const userDoc = await User.create({
@@ -108,3 +159,39 @@ exports.logout = (req, res, next) => {
     status: "success",
   });
 };
+
+exports.resetPassword = catchAsync(async (req, res, next) => {
+  const { email, password, passwordConfirm, otp } = req.body;
+
+  if (!password || !passwordConfirm)
+    return next(
+      new AppError("Please provide a new password and Password confirmation")
+    );
+
+  if (password !== passwordConfirm)
+    return next(
+      new AppError("Your new password is different from your password confirm")
+    );
+
+  const emailKey = process.env.EMAIL_CACHE_KEY + email;
+  const originalToken = await redis.get(emailKey);
+
+  if (!originalToken) return next(new AppError("Your token expired.", 404));
+
+  if (otp !== originalToken)
+    return next(new AppError("Incorrect token. Try again."));
+
+  const user = await User.findOne({
+    email,
+  });
+  if (!user)
+    return next(
+      new AppError(`No user was found with the email: ${email}`, 400)
+    );
+
+  user.password = bcrypt.hashSync(password, bcryptSalt);
+
+  await user.save();
+
+  createSendToken(res, user, 201);
+});

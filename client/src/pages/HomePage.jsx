@@ -16,7 +16,7 @@ const HomePage = () => {
   const usePlacesToShow = query || queryPrice || queryGuests || queryPerks;
 
   const placesToShow = usePlacesToShow
-    ? places.filter((place) => {
+    ? places?.filter?.((place) => {
         const {
           title = "",
           name = "",

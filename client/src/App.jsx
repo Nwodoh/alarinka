@@ -10,6 +10,9 @@ import { UserContextProvider } from "./UserContext";
 import AccountPage from "./pages/AccountPage";
 import { useEffect, useState } from "react";
 import PlaceDetails from "./components/PlaceDetails/PlaceDetails";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+import VerifyUser from "./pages/VerifyUser";
 
 axios.defaults.baseURL = "http://localhost:4000/";
 axios.defaults.withCredentials = true;
@@ -27,7 +30,9 @@ function App() {
           <Route path="/places/:slug" element={<PlaceDetails />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          {/* <Route path='/account' element={<AccountPage />} /> */}
+          <Route path="/register/verify" element={<VerifyUser />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/forgot-password/reset" element={<ResetPassword />} />
           <Route path="/account/:subpage?" element={<AccountPage />} />
           <Route path="/account/:subpage/:action" element={<AccountPage />} />
         </Route>

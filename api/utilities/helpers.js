@@ -25,3 +25,18 @@ exports.parseCookies = (cookieHeader) => {
 
   return parsedCookies;
 };
+
+const randomizeString = (str = "0123456789", outputLength = str.length) => {
+  let randomStr = "";
+  for (let i = 0; i < outputLength; i++) {
+    const randomIndex = Math.floor(Math.random() * str.length);
+    randomStr += str[randomIndex];
+  }
+  return randomStr;
+};
+
+exports.generateRandomToken = (tokenLength = 6, tokenBY = "0123456789") => {
+  const rearrangedStr = randomizeString(tokenBY);
+  const token = randomizeString(rearrangedStr, tokenLength);
+  return token;
+};

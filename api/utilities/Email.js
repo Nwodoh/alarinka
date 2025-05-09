@@ -1,26 +1,18 @@
 const pug = require("pug");
 const nodemailer = require("nodemailer");
 
-const {
-  EMAIL_FROM,
-  NODE_ENV,
-  SENDGRID_USERNAME,
-  SENDGRID_PASSWORD,
-  EMAIL_HOST,
-  EMAIL_PORT,
-  EMAIL_USER,
-  EMAIL_PASSWORD,
-} = process.env;
+const { EMAIL_FROM, SENDGRID_USERNAME, SENDGRID_PASSWORD } = process.env;
 
 module.exports = class Email {
   #from = `Alarinka <${EMAIL_FROM}>`;
 
-  constructor({ user, place, owner, url }) {
+  constructor({ user, place, owner, url, otp }) {
     this.user = user;
     this.owner = owner;
     this.place = place;
     this.to = user.email;
     this.url = url;
+    this.otp = otp;
   }
 
   setProp(prop, newValue) {
@@ -29,8 +21,6 @@ module.exports = class Email {
   }
 
   newTransport() {
-    // USE SENDGRID IF IN "PRODUCTION"
-    // if (NODE_ENV === "production") {
     return nodemailer.createTransport({
       service: "SendGrid",
       auth: {
@@ -38,16 +28,6 @@ module.exports = class Email {
         pass: SENDGRID_PASSWORD,
       },
     });
-    // }
-
-    // return nodemailer.createTransport({
-    //   host: EMAIL_HOST,
-    //   port: EMAIL_PORT,
-    //   auth: {
-    //     user: EMAIL_USER,
-    //     pass: EMAIL_PASSWORD,
-    //   },
-    // });
   }
 
   async send(template, subject) {
@@ -76,6 +56,20 @@ module.exports = class Email {
     } catch (err) {
       console.log(err);
     }
+  }
+
+  async sendPasswordReset() {
+    await this.send(
+      "passwordReset",
+      `Alarinka password reset code [${this.otp}].  (expires in 20 minutes)`
+    );
+  }
+
+  async sendEmailVerificationOTP() {
+    await this.send(
+      "emailVerificationOTP",
+      `Alarinka Verification Code [${this.otp}] (expires in 20 minutes)`
+    );
   }
 
   async sendBookedPlace() {

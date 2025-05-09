@@ -6,6 +6,8 @@ const userController = require("../controllers/user/userController");
 
 router.route("/").get(authController.isLoggedIn, userController.getProfile);
 router.route("/register").post(authController.register);
+router.route("/register/otp").post(authController.sendEmailOtp);
+router.route("/reset-password").post(authController.resetPassword);
 router.route("/login").post(authController.login);
 router
   .route("/upload/image")
